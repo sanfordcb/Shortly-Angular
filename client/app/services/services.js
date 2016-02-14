@@ -2,7 +2,43 @@ angular.module('shortly.services', [])
 
 .factory('Links', function ($http) {
   // Your code here
+  //make available to use inside controller
+  //counter
+  //call getLinks
+  var getLinks = function() {
+    return $http({
+      method: 'GET',
+      url: '/api/links',
+      //data: links
+    })
+    .then(function(resp) {
+      return resp.data;
+    });
+  };
+
+  var addLink = function(link){
+    return $http({
+      method: 'POST',
+      url: '/api/links',
+      data: link
+    })
+    .then(function(resp){
+      return resp.data.link;
+    })
+  };
+
+  var isValidUrl = function(link) {
+    rValidUrl = /^(?!mailto:)(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[0-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))|localhost)(?::\d{2,5})?(?:\/[^\s]*)?$/i;
+    return link.match(rValidUrl);
+  };
+
+  return {
+    getLinks: getLinks,
+    addLink: addLink,
+    isValidUrl: isValidUrl
+  };
 })
+
 .factory('Auth', function ($http, $location, $window) {
   // Don't touch this Auth service!!!
   // it is responsible for authenticating our user
@@ -42,7 +78,9 @@ angular.module('shortly.services', [])
     $location.path('/signin');
   };
 
-
+  //functions return from factory in object form
+  //methods defined in object
+  //modularity
   return {
     signin: signin,
     signup: signup,

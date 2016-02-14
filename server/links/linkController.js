@@ -74,6 +74,9 @@ module.exports = {
   navToLink: function (req, res, next) {
     var link = req.navLink;
     link.visits++;
+    //savedLink refers to link on 78 (req url)
+    //.save mongoose saving data
+    //then error handles/redirects
     link.save(function (err, savedLink) {
       if (err) {
         next(err);
